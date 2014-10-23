@@ -37,7 +37,7 @@ Assumes data that looks like file sample_output.txt"""
     def process(self, device, results, log):
         log.info("Starting process() for modeler JuniperPluggableOpticsCmd")
 
-        # remove promp at end if necessary
+        # parse XML
         try:
             root = ET.fromstring(results)
         except ET.ParseError:
@@ -62,56 +62,41 @@ Assumes data that looks like file sample_output.txt"""
                 continue
             try:
                 intfDiags = physicalInterface.find(ns + 'optics-diagnostics')
+                # Must have one or more sensors, not just an interface name
+                foundSensor = False
                 try:
                     intfDiags.find(ns + 'laser-bias-current').text
-                    om = self.objectMap()
-                    om.id = self.prepId("%s %s" % (intf,'cmdMilliamps'))
-                    om.title = intf + ' ' + 'Bias Current Sensor'
-                    om.ifDescr = intf
-                    om.entSensorType = 'cmdMilliamps'
-                    rm.append(om)
+                    foundSensor = True
                     log.info('Found Bias Current Sensor for %s' % intf)
                 except:
                     log.debug('No Bias Current Sensor for %s' % intf)
-
                 try:
                     intfDiags.find(ns + 'laser-output-power-dbm').text
-                    om = self.objectMap()
-                    om.id = self.prepId("%s %s" % (intf,'cmdTxDbm'))
-                    om.title = intf + ' ' + 'Transmit Power Sensor'
-                    om.ifDescr = intf 
-                    om.entSensorType = 'cmdTxDbm'
-                    rm.append(om)
+                    foundSensor = True
                     log.info('Found Transmit Power Sensor for %s' % intf)
                 except:
                     log.debug('No Transmit Power Sensor for %s' % intf)
-                    
                 try:
                     intfDiags.find(ns + 'module-temperature').\
                               attrib[rootns + 'celsius']
-                    om = self.objectMap()
-                    om.id = self.prepId("%s %s" % (intf,'cmdCelcius'))
-                    om.title = intf + ' ' + 'Module Temperature Sensor'
-                    om.ifDescr = intf
-                    om.entSensorType = 'cmdCelcius'
-                    rm.append(om)
+                    foundSensor = True
                     log.info('Found Module Temperature Sensor for %s' % intf)
                 except:
                     log.debug('No Module Temperature Sensor for %s' % intf)
-
                 try:
                     intfDiags.find(ns + 'laser-rx-optical-power-dbm').text
-                    om = self.objectMap()
-                    om.id = self.prepId("%s %s" % (intf,'cmdRxDbm'))
-                    om.title = intf + ' ' + 'Receive Power Sensor'
-                    om.ifDescr = intf
-                    om.entSensorType = 'cmdRxDbm'
-                    rm.append(om)
+                    foundSensor = True
                     log.info('Found Receive Power Sensor for %s' % intf)
                 except:
                     log.debug('No Receive Power Sensor for %s' % intf)
+
+                if foundSensor:
+                    om = self.objectMap()
+                    om.id = self.prepId(intf)
+                    om.title = om.ifDescr = intf + ' ' + 'Pluggable Optics'
+                    om.monitor = True
+                    rm.append(om)
             except:
                 log.info('Error parsing optics-diagnostics xml in JuniperPluggableOpticsCmd')
                 continue
-        log.info(pprint.pformat(rm))
         return rm

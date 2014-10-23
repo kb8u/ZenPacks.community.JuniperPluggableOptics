@@ -34,15 +34,10 @@ class JuniperPluggableOptics(ExpansionCard, ManagedEntity):
     portal_type = meta_type = 'JuniperPluggableOptics'
 
     # set default _properties
-    ifDescr = 'Not set by modeler'   # from IF-MIB ifEntry table
-    physDescr = 'Not set by modeler' # entPhysicalDescr from entPhysicalTable
-    # the following are from the entSensorValues table
-    entSensorType = 'unknown' # like amperes, celsius, dBm, voltsDC
+    ifDescr = 'Not set by modeler'
 
     _properties = (
         {'id': 'ifDescr', 'type':'string', 'mode':''},
-        {'id': 'physDescr', 'type':'string', 'mode':''},
-        {'id': 'entSensorType','type': 'string','mode':''},
     )
 
     factory_type_information = (
@@ -75,15 +70,16 @@ class JuniperPluggableOptics(ExpansionCard, ManagedEntity):
         )
 
     def viewName(self):
-        return self.physDescr
+        return self.title
     name = viewName
 
     def getRRDTemplateName(self):
-        if self.device().zCommandProtocol == 'ssh':
-            return 'JuniperPluggableOpticsSensorSsh' \
-                + self.entSensorType.capitalize()
+        if self.device().zCommandProtocol == 'ssh' and \
+           self.device().zCommandPassword and \
+           self.device().zCommandUserName:
+            return 'JuniperPluggableOpticsSensorSsh'
         else:
-            return 'JuniperPluggableOpticsSensor' + self.entSensorType.capitalize()
+            return 'JuniperPluggableOpticsSensorSnmp'
 
     def manage_deleteComponent(self, REQUEST=None):
         """
