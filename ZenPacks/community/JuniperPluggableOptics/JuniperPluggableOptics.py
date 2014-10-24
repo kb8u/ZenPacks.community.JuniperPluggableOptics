@@ -34,10 +34,12 @@ class JuniperPluggableOptics(ExpansionCard, ManagedEntity):
     portal_type = meta_type = 'JuniperPluggableOptics'
 
     # set default _properties
-    ifDescr = 'Not set by modeler'
+    posName = 'Not set by modeler'
+    intf = 'Not set by modeler'
 
     _properties = (
-        {'id': 'ifDescr', 'type':'string', 'mode':''},
+        {'id': 'posName', 'type':'string', 'mode':''},
+        {'id': 'intf', 'type':'string', 'mode':''},
     )
 
     factory_type_information = (
@@ -76,7 +78,7 @@ class JuniperPluggableOptics(ExpansionCard, ManagedEntity):
     def getRRDTemplateName(self):
         if self.device().zCommandProtocol == 'ssh' and \
            self.device().zCommandPassword and \
-           self.device().zCommandUserName:
+           self.device().zCommandUsername:
             return 'JuniperPluggableOpticsSensorSsh'
         else:
             return 'JuniperPluggableOpticsSensorSnmp'

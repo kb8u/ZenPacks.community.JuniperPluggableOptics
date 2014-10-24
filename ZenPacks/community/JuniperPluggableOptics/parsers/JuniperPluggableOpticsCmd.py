@@ -42,7 +42,7 @@ class JuniperPluggableOpticsCmd(CommandParser):
         log.debug('found namespace %s', ns)
 
         for physicalInterface in root[0]:
-            mA,C,OPRdbm,OPTdbm = False
+            od = {}
             try:
                 intf = physicalInterface.find(ns + 'name').text
             except:
@@ -51,28 +51,29 @@ class JuniperPluggableOpticsCmd(CommandParser):
             try:
                 intfDiags = physicalInterface.find(ns + 'optics-diagnostics')
                 try:
-                    mA = intfDiags.find(ns + 'laser-bias-current').text
-                    log.debug('Bias Current for %s: %s' % (intf,mA))
+                    od['mA'] = intfDiags.find(ns + 'laser-bias-current').text
+                    log.debug('Bias Current for %s: %s' % (intf,od['mA']))
                 except:
                     log.debug('No Bias Current Sensor for %s' % intf)
 
                 try:
-                    OPTdbm = intfDiags.find(ns + 'laser-output-power-dbm').text
-                    log.debug('Transmit Power for %s: %s' % (intf,OPTdbm))
+                    od['OPTdbm'] = \
+                        intfDiags.find(ns + 'laser-output-power-dbm').text
+                    log.debug('Transmit Power for %s: %s' % (intf,od['OPTdbm']))
                 except:
                     log.debug('No Transmit Power Sensor for %s' % intf)
                     
                 try:
-                    C = intfDiags.find(ns + 'module-temperature').\
-                                  attrib[rootns + 'celsius']
-                    log.debug('Module Temperature %s: %s' % (intf,C))
+                    od['C'] = intfDiags.find(ns + 'module-temperature').\
+                                        attrib[rootns + 'celsius']
+                    log.debug('Module Temperature %s: %s' % (intf,od['C']))
                 except:
                     log.debug('No Module Temperature Sensor for %s' % intf)
 
                 try:
-                    OPRdbm = intfDiags.find(
-                                       ns + 'laser-rx-optical-power-dbm').text
-                    log.debug('Receive Power for %s: %s' % (intf,OPRdbm))
+                    od['OPRdbm'] = \
+                        intfDiags.find(ns + 'laser-rx-optical-power-dbm').text
+                    log.debug('Receive Power for %s: %s' % (intf,od['OPRdbm']))
                 except:
                     log.debug('No Receive Power Sensor for %s' % intf)
             except:
@@ -80,5 +81,7 @@ class JuniperPluggableOpticsCmd(CommandParser):
                 continue
             
             for dp in cmd.points:
-                if dp.id in....something something something
-                results.values.append()
+                if dp.id in od:
+                    result.values.append((dp,od[dp.id]))
+
+        return result

@@ -93,7 +93,8 @@ Assumes data that looks like file sample_output.txt"""
                 if foundSensor:
                     om = self.objectMap()
                     om.id = self.prepId(intf)
-                    om.title = om.ifDescr = intf + ' ' + 'Pluggable Optics'
+                    om.title = om.posName = intf + ' ' + 'Pluggable Optics'
+                    om.intf = intf
                     om.monitor = True
                     rm.append(om)
             except:
