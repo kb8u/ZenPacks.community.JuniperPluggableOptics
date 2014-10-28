@@ -81,7 +81,7 @@ class JuniperPluggableOptics(ExpansionCard, ManagedEntity):
            self.device().zCommandUsername:
             return 'JuniperPluggableOpticsSensorSsh'
         else:
-            return 'JuniperPluggableOpticsSensorSnmp'
+            return 'JuniperPluggableOpticsSensor'
 
     def manage_deleteComponent(self, REQUEST=None):
         """

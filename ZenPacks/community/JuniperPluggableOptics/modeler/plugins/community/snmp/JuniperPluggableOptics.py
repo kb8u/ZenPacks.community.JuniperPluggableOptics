@@ -43,7 +43,7 @@ class JuniperPluggableOptics(SnmpPlugin):
         """
 Run SNMP queries, process returned values, find Juniper PluggableOptics sensors
         """
-        log.info('Starting process() for modeler JuniperPluggableOpticsMap')
+        log.info('Starting process() for modeler JuniperPluggableOptics')
 
         getdata, tabledata = results
         rm = self.relMap()

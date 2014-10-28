@@ -26,12 +26,20 @@ class JuniperPluggableOpticsCmd(CommandPlugin):
     """Map Juniper optical modules on intefaces to the python class for them.
 Assumes data that looks like file sample_output.txt"""
 
-
     # The command to run.
     command = "show interfaces diagnostics optics | display xml\r"
     modname = "ZenPacks.community.JuniperPluggableOptics.JuniperPluggableOptics"
     relname = "cards"
     compname = "hw"
+
+
+    def condition(self, device, log):
+        if device.zCommandProtocol == 'ssh' and \
+           device.zCommandPassword and \
+           device.zCommandUsername:
+            return True
+        else:
+            return False
 
 
     def process(self, device, results, log):
