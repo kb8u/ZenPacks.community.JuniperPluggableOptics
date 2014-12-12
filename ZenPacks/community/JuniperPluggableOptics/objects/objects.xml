@@ -3,7 +3,7 @@
 <!-- ('', 'zport', 'dmd', 'Devices', 'rrdTemplates', 'JuniperPluggableOpticsSensor') -->
 <object id='/zport/dmd/Devices/rrdTemplates/JuniperPluggableOpticsSensor' module='Products.ZenModel.RRDTemplate' class='RRDTemplate'>
 <property type="string" id="targetPythonClass" mode="w" >
-ZenPacks.community.JuniperPluggableOptics
+ZenPacks.community.JuniperPluggableOptics.JuniperPluggableOptics
 </property>
 <tomanycont id='datasources'>
 <object id='Optical Power Receive' module='Products.ZenModel.BasicDataSource' class='BasicDataSource'>
