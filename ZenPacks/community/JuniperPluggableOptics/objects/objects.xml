@@ -406,7 +406,7 @@ AVERAGE
 <!-- ('', 'zport', 'dmd', 'Devices', 'rrdTemplates', 'JuniperPluggableOpticsSensorSsh') -->
 <object id='/zport/dmd/Devices/rrdTemplates/JuniperPluggableOpticsSensorSsh' module='Products.ZenModel.RRDTemplate' class='RRDTemplate'>
 <property type="string" id="targetPythonClass" mode="w" >
-ZenPacks.community.JuniperPluggableOptics
+ZenPacks.community.JuniperPluggableOptics.JuniperPluggableOptics
 </property>
 <tomanycont id='datasources'>
 <object id='JuniperPluggableOpticsCmd' module='Products.ZenModel.BasicDataSource' class='BasicDataSource'>
